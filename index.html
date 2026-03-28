@@ -57,7 +57,10 @@ body {
 .dialog.hide {
   transform: translateY(100%);
 }
-
+h1 {
+    font-size: 58px;
+    margin: 0 0 60px;
+}
 h2 {
   font-size: 58px;
   font-weight: 600;
@@ -92,7 +95,7 @@ h2 {
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 38px;
+  font-size: 42px;
   opacity: 0.4;
   transition: transform 0.15s, opacity 0.15s;
 }
@@ -117,7 +120,7 @@ h2 {
   width: 100%;
   display: flex;
   justify-content: space-between;
-  font-size: 38px;
+  font-size: 42px;
   padding: 0 0;
   box-sizing: border-box;
   display: none;
@@ -175,7 +178,7 @@ h2 {
   justify-content: space-between;
   align-items: center;
   margin: 20px 0;
-  font-size: 38px;
+  font-size: 42px;
   color: #333;
   padding: 0 10px;
   box-sizing: border-box;
@@ -242,7 +245,7 @@ h2 {
 }
 
 .btn {
-  font-size: 38px;
+  font-size: 42px;
   font-family: 'Roboto';
   font-weight: 500;
   padding: 20px 16px;
@@ -268,7 +271,7 @@ h2 {
   }
 
   .block-item {
-    font-size: 38px;
+    font-size: 42px;
     padding: 38px ;
     line-height: 56px;
   }
@@ -284,12 +287,18 @@ h2 {
 
 <div class="container">
 
-<h2>Параметры</h2>
+<h1>Параметры</h1>
 
   <!-- Блок 1 -->
+   <div class="block">
+    <div class="block-item">Все регионы</div>
+  </div> 
+  
   <div class="block">
     <div class="block-item">Марка, модель, поколение</div>
   </div>
+
+
 
   <!-- Блок 2 -->
   <div class="block">
