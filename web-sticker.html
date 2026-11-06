@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hover comparison</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; font-family: "Inter", sans-serif !important; }
+body { margin: 0; background: #fff; font-family: "Inter", sans-serif !important; font-synthesis: none; }
+.theme-panel { padding: 20px; }
+.theme-light { background: #fff; color: #000; min-height: 100vh; }
+
+.theme-dark { background: #000; color: #fff; min-height: 100vh; display: none; }
+body.dark-mode .theme-light { display: none; }
+body.dark-mode .theme-dark { display: block; }
+.theme-toggle {
+  position: fixed; z-index: 10; left: 50%; bottom: 16px; transform: translateX(-50%);
+  display: inline-flex; align-items: center; gap: 9px; padding: 10px 14px;
+  border: 0; outline: none; appearance: none;
+  border-radius: 999px; background: #f2f2f2; color: #171717;
+  box-shadow: none; font-size: 13px; cursor: pointer;
+  user-select: none;
+}
+.theme-toggle input { margin: 0; width: 16px; height: 16px; accent-color: #222; cursor: pointer; }
+body.dark-mode .theme-toggle { background: #292929; color: #fff; }
+body.dark-mode .theme-toggle input { accent-color: #fff; }
+.theme-toggle:focus, .theme-toggle:focus-visible, .theme-toggle:active { outline: none; border: 0; }
+
+/* Палитра тёмной темы — значения взяты из приложенных SVG */
+.theme-dark .normal { --h: 147; --s: 100%; --l: 10.4%; --rgb: 0, 53, 24; --text: #07964B; }
+.theme-dark .good { --h: 142; --s: 90%; --l: 20%; --rgb: 5, 100, 48; --text: rgba(255,255,255,.48); }
+.theme-dark .excellent { --h: 145; --s: 98%; --l: 26.9%; --rgb: 3, 135, 65; --text: rgba(255,255,255,.48); }
+.theme-dark .high { --h: 210; --s: 89%; --l: 17.3%; --rgb: 5, 45, 84; --text: rgba(255,255,255,.48); }
+.theme-dark .unrated { --h: 0; --s: 0%; --l: 17.6%; --rgb: 45, 45, 47; --text: #818184; }
+.theme-dark .certified { --h: 45; --s: 100%; --l: 14.5%; --rgb: 74, 55, 0; --text: rgba(255,255,255,.48); }
+
+.theme-dark .owner-sticker {
+  background: linear-gradient(90deg, hsl(278.96 73.33% 20.59%) 0%, hsl(258.59 59.66% 23.33%) 100%);
+  color: rgba(255,255,255,.48);
+}
+.theme-dark .hsl .web-sticker:not(.owner):hover {
+  background-color: hsl(var(--h), var(--s), calc(var(--l) + 4%));
+}
+.theme-dark .alpha .web-sticker:not(.owner):hover {
+  background-color: rgba(var(--rgb), .76);
+}
+.theme-dark .alpha-32 .web-sticker:not(.owner):hover {
+  background-color: rgba(var(--rgb), .68);
+}
+.theme-dark .black .web-sticker:not(.owner):hover {
+  background-color: color-mix(in srgb, hsl(var(--h), var(--s), var(--l)) 96%, #fff 4%);
+}
+.theme-dark .hsl .owner-sticker:hover {
+  background-image: linear-gradient(90deg, hsl(278.40 59.06% 24.90%) 0%, hsl(258.18 47.83% 27.06%) 100%);
+}
+.theme-dark .alpha .owner-sticker:hover {
+  background-image: linear-gradient(90deg, hsl(278.96 73.33% 20.59% / .76) 0%, hsl(258.59 59.66% 23.33% / .76) 100%);
+}
+.theme-dark .alpha-32 .owner-sticker:hover {
+  background-image: linear-gradient(90deg, hsl(278.96 73.33% 20.59% / .68) 0%, hsl(258.59 59.66% 23.33% / .68) 100%);
+}
+.theme-dark .black .owner-sticker:hover {
+  background-image: linear-gradient(90deg, color-mix(in srgb, hsl(278.96 73.33% 20.59%) 96%, #fff 4%) 0%, color-mix(in srgb, hsl(258.59 59.66% 23.33%) 96%, #fff 4%) 100%);
+}
+
+h2 { font-size: 20px; font-weight: 600; margin: 0 0 20px; }
+.section { margin-bottom: 40px; }
+.price-list { display: flex; flex-wrap: wrap; gap: 20px; }
+.web-sticker {
+  padding: 3px 8px; border-radius: 999px; display: inline-flex;
+  align-items: center; gap: 8px; font-size: 13px !important; line-height: 18px;
+  white-space: nowrap; cursor: pointer;
+  background-color: hsl(var(--h), var(--s), var(--l));
+  color: var(--text);
+  transition: background-color 100ms ease;
+}
+.normal { --h: 134.6; --s: 82.2%; --l: 91.2%; --rgb: 214, 251, 223; --text: #07964B; }
+.good { --h: 137.4; --s: 65.6%; --l: 68%; --rgb: 120, 227, 151; --text: #038140; }
+.excellent { --h: 146.1; --s: 76.4%; --l: 43.1%; --rgb: 26, 194, 99; --text: #fff; }
+.high { --h: 211.2; --s: 100%; --l: 95.1%; --rgb: 230, 242, 255; --text: #858585; }
+.unrated { --h: 240; --s: 7.7%; --l: 94.9%; --rgb: 241, 241, 243; --text: #858585; }
+.certified {
+  --h: 47.32; --s: 100%; --l: 86.08%; --rgb: 255, 240, 184;
+  --text: rgba(0, 0, 0, 64%);
+}
+.owner-sticker {
+  background: linear-gradient(90deg, hsl(273.53 94.44% 92.94%) 0%, hsl(248.28 82.86% 93.14%) 100%);
+  color: rgba(0, 0, 0, 0.76);
+  transition: background-image 100ms ease;
+  line-height: 18px;
+  padding-left: 4px;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.owner-icon { display: block; width: 16px; height: 16px; flex: 0 0 16px; }
+.chevron { width: 10px; height: 7px; flex: none; }
+
+.hsl .web-sticker:not(.owner):hover {
+  background-color: hsl(var(--h), var(--s), calc(var(--l) - 4%));
+}
+.alpha .web-sticker:not(.owner) { background-color: rgb(var(--rgb)); }
+.alpha .web-sticker:not(.owner):hover { background-color: rgba(var(--rgb), 0.76); }
+.alpha-32 .web-sticker:not(.owner):hover { background-color: rgba(var(--rgb), 0.68); }
+
+.black .web-sticker:not(.owner):hover {
+  background-color: color-mix(in srgb, hsl(var(--h), var(--s), var(--l)) 96%, #000 4%);
+}
+
+/* Hover для отдельного стикера «от собственника» */
+.hsl .owner-sticker:hover {
+  background-image: linear-gradient(
+    90deg,
+    hsl(273.53 94.44% 88.94%) 0%,
+    hsl(248.28 82.86% 89.14%) 100%
+  );
+}
+.alpha .owner-sticker:hover {
+  background-image: linear-gradient(
+    90deg,
+    hsl(273.53 94.44% 92.94% / 0.76) 0%,
+    hsl(248.28 82.86% 93.14% / 0.76) 100%
+  );
+}
+.alpha-32 .owner-sticker:hover {
+  background-image: linear-gradient(
+    90deg,
+    hsl(273.53 94.44% 92.94% / 0.68) 0%,
+    hsl(248.28 82.86% 93.14% / 0.68) 100%
+  );
+}
+.black .owner-sticker:hover {
+  background-image: linear-gradient(
+    90deg,
+    color-mix(in srgb, hsl(273.53 94.44% 92.94%) 96%, #000 4%) 0%,
+    color-mix(in srgb, hsl(248.28 82.86% 93.14%) 96%, #000 4%) 100%
+  );
+}
+
+.test-sticker { padding: 4px; background: #FDD9D4; color: #DB001C; --h: 6.7; --s: 100%; --l: 91.2%; --rgb: 253, 217, 212; --text: #DB001C; }
+.test-icon { display: block; width: 16px; height: 16px; flex: 0 0 16px; }
+/* Один и тот же базовый фон тестовых стикеров во всех четырёх рядах тёмной темы */
+.theme-dark .section.hsl .test-sticker,
+.theme-dark .section.alpha .test-sticker,
+.theme-dark .section.alpha-32 .test-sticker,
+.theme-dark .section.black .test-sticker {
+  background-color: #580506;
+  /* Параметры тёмно-красного фона для тех же hover-правил, что и у остальных стикеров */
+  --h: 359.3; --s: 89.2%; --l: 18.2%; --rgb: 88, 5, 6; --text: #DB001C;
+}
+</style>
+</head>
+<body>
+
+<div class="theme-panel theme-light">
+<div class="section hsl">
+  <h2>hover HSL -4%</h2>
+  <div class="price-list">
+    <div class="web-sticker normal">нормальная цена <svg class="chevron" viewBox="0 0 10 7" fill="none"><path d="M1 1.5L5 5.5L9 1.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div class="web-sticker good">хорошая цена <svg class="chevron" viewBox="0 0 10 7" fill="none"><path d="M1 1.5L5 5.5L9 1.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div class="web-sticker excellent">отличная цена <svg class="chevron" viewBox="0 0 10 7" fill="none"><path d="M1 1.5L5 5.5L9 1.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div class="web-sticker high">высокая цена <svg class="chevron" viewBox="0 0 10 7" fill="none"><path d="M1 1.5L5 5.5L9 1.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div class="web-sticker unrated">без оценки <svg class="chevron" viewBox="0 0 10 7" fill="none"><path d="M1 1.5L5 5.5L9 1.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div class="web-sticker certified">сертифицирован</div>
+    <div class="web-sticker owner owner-sticker"><svg class="owner-icon" width="16" height="16" viewBox="4 4 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M10.8391 19.4961C10.8636 19.5223 10.8894 19.5474 10.9156 19.5719C10.9071 19.5639 10.8983 19.5559 10.8899 19.5477C10.8726 19.5308 10.8556 19.5137 10.8391 19.4961Z" fill="#9F87F7"></path><path d="M10.8391 4.50393C11.4381 3.86287 12.4433 3.82917 13.0844 4.42815C13.1106 4.45265 13.1365 4.47772 13.161 4.50393L14.0149 5.41799C14.3281 5.75322 14.7712 5.93665 15.2297 5.92112L16.4797 5.87893C17.3565 5.84927 18.0913 6.53573 18.1211 7.41252C18.1223 7.44837 18.1223 7.48449 18.1211 7.52034L18.0789 8.77034C18.0634 9.22888 18.2468 9.67192 18.5821 9.98518L19.4961 10.8391C20.1372 11.4381 20.1709 12.4433 19.5719 13.0844C19.5474 13.1106 19.5223 13.1365 19.4961 13.161L18.5821 14.0149C18.2468 14.3281 18.0634 14.7712 18.0789 15.2297L18.1211 16.4797C18.1375 16.9635 17.9361 17.4042 17.6047 17.7071C16.5142 15.7352 14.4128 14.4 12 14.4C9.58729 14.4 7.48669 15.7353 6.39612 17.7071C6.09133 17.4288 5.89409 17.0326 5.87893 16.5875C5.87772 16.5517 5.87772 16.5156 5.87893 16.4797L5.92112 15.2297C5.93666 14.7712 5.75321 14.3281 5.41799 14.0149L4.50393 13.161C3.86287 12.5619 3.82918 11.5568 4.42815 10.9157C4.45265 10.8894 4.47772 10.8636 4.50393 10.8391L5.41799 9.98518C5.75321 9.67192 5.93666 9.22888 5.92112 8.77034L5.87893 7.52034C5.84924 6.6435 6.53572 5.90881 7.41252 5.87893C7.44836 5.87774 7.4845 5.87774 7.52034 5.87893L8.77034 5.92112C9.22887 5.93665 9.67194 5.75322 9.98518 5.41799L10.8391 4.50393ZM12 8.00002C10.6746 8.00005 9.60002 9.07455 9.60002 10.4C9.60002 11.7255 10.6746 12.8 12 12.8C13.3255 12.8 14.4 11.7255 14.4 10.4C14.4 9.07454 13.3255 8.00002 12 8.00002Z" fill-rule="evenodd" clip-rule="evenodd" fill="#9F87F7"></path><path opacity="0.5" d="M17.6044 17.707C17.3352 17.953 16.9803 18.108 16.5873 18.1213C16.5515 18.1225 16.5156 18.1225 16.4797 18.1213L15.2296 18.0789C14.771 18.0634 14.3282 18.2468 14.0149 18.582L13.1609 19.496C12.5618 20.1371 11.5565 20.1711 10.9154 19.5721C10.8891 19.5476 10.8638 19.5222 10.8392 19.496L9.98524 18.582C9.672 18.2468 9.22913 18.0634 8.77059 18.0789L7.52048 18.1213C7.08877 18.1359 6.69145 17.9769 6.39575 17.707C7.48631 15.7352 9.58727 14.4 12.0001 14.4C14.4129 14.4 16.5139 15.7352 17.6044 17.707ZM12.0001 8C13.3256 8 14.4001 9.07452 14.4001 10.4C14.4001 11.7255 13.3256 12.8 12.0001 12.8C10.6746 12.8 9.60009 11.7255 9.60009 10.4C9.60009 9.07452 10.6746 8 12.0001 8Z" fill-rule="evenodd" clip-rule="evenodd" fill="#9F87F7"></path></svg><span>от собственника</span></div> <div class="web-sticker test-sticker"><svg class="test-icon" viewBox="4 4 16 16" aria-hidden="true"><path d="M13.0294 4.55071C13.7002 4.55071 14.345 4.81345 14.8233 5.28375L19.5141 9.89816C20.1585 10.5323 20.1624 11.5697 19.5231 12.209L17.5965 14.1365C16.9608 14.7719 15.9295 14.7722 15.2939 14.1365L13.7279 12.5696L9.40868 17.3212C8.54489 18.271 7.01767 18.3123 6.11138 17.3502C5.23085 16.4154 5.31146 14.9336 6.2885 14.1002L11.0582 10.0317L8.355 7.32844C7.32989 6.30307 8.05603 4.55009 9.50587 4.5498L13.0294 4.55071Z" fill="#DB001C"/></svg></div> <div class="web-sticker test-sticker"><svg class="test-icon" viewBox="4 4 16 16" aria-hidden="true"><path d="M4.96979 5.09473C5.26269 4.80186 5.73746 4.80184 6.03034 5.09473L19.0303 18.0947C19.3232 18.3876 19.3232 18.8624 19.0303 19.1553C18.7375 19.4482 18.2627 19.4481 17.9698 19.1553L16.9298 18.1152C16.5767 18.4308 16.1128 18.625 15.6016 18.625H8.3985C7.29403 18.6249 6.3985 17.7295 6.3985 16.625V11.1846C6.39868 10.2204 6.74773 9.2898 7.378 8.56348L4.96979 6.15527C4.6769 5.86238 4.6769 5.38762 4.96979 5.09473Z" fill="#DB001C"/><path d="M15.6016 4.625C16.7062 4.625 17.6016 5.52043 17.6016 6.625V14.5557L9.40339 6.35742L10.1075 5.59375C10.6755 4.97643 11.4767 4.62512 12.3155 4.625H15.6016Z" fill="#DB001C"/></svg></div>
+  </div>
+</div>
+
+<div class="section alpha">
+  <h2>hover alpha 24%</h2>
+  <div class="price-list">
+    <div class="web-sticker normal">нормальная цена <svg class="chevron" viewBox="0 0 10 7" fill="none"><path d="M1 1.5L5 5.5L9 1.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div class="web-sticker good">хорошая цена <svg class="chevron" viewBox="0 0 10 7" fill="none"><path d="M1 1.5L5 5.5L9 1.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div class="web-sticker excellent">отличная цена <svg class="chevron" viewBox="0 0 10 7" fill="none"><path d="M1 1.5L5 5.5L9 1.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div class="web-sticker high">высокая цена <svg class="chevron" viewBox="0 0 10 7" fill="none"><path d="M1 1.5L5 5.5L9 1.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div class="web-sticker unrated">без оценки <svg class="chevron" viewBox="0 0 10 7" fill="none"><path d="M1 1.5L5 5.5L9 1.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div class="web-sticker certified">сертифицирован</div>
+    <div class="web-sticker owner owner-sticker"><svg class="owner-icon" width="16" height="16" viewBox="4 4 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M10.8391 19.4961C10.8636 19.5223 10.8894 19.5474 10.9156 19.5719C10.9071 19.5639 10.8983 19.5559 10.8899 19.5477C10.8726 19.5308 10.8556 19.5137 10.8391 19.4961Z" fill="#9F87F7"></path><path d="M10.8391 4.50393C11.4381 3.86287 12.4433 3.82917 13.0844 4.42815C13.1106 4.45265 13.1365 4.47772 13.161 4.50393L14.0149 5.41799C14.3281 5.75322 14.7712 5.93665 15.2297 5.92112L16.4797 5.87893C17.3565 5.84927 18.0913 6.53573 18.1211 7.41252C18.1223 7.44837 18.1223 7.48449 18.1211 7.52034L18.0789 8.77034C18.0634 9.22888 18.2468 9.67192 18.5821 9.98518L19.4961 10.8391C20.1372 11.4381 20.1709 12.4433 19.5719 13.0844C19.5474 13.1106 19.5223 13.1365 19.4961 13.161L18.5821 14.0149C18.2468 14.3281 18.0634 14.7712 18.0789 15.2297L18.1211 16.4797C18.1375 16.9635 17.9361 17.4042 17.6047 17.7071C16.5142 15.7352 14.4128 14.4 12 14.4C9.58729 14.4 7.48669 15.7353 6.39612 17.7071C6.09133 17.4288 5.89409 17.0326 5.87893 16.5875C5.87772 16.5517 5.87772 16.5156 5.87893 16.4797L5.92112 15.2297C5.93666 14.7712 5.75321 14.3281 5.41799 14.0149L4.50393 13.161C3.86287 12.5619 3.82918 11.5568 4.42815 10.9157C4.45265 10.8894 4.47772 10.8636 4.50393 10.8391L5.41799 9.98518C5.75321 9.67192 5.93666 9.22888 5.92112 8.77034L5.87893 7.52034C5.84924 6.6435 6.53572 5.90881 7.41252 5.87893C7.44836 5.87774 7.4845 5.87774 7.52034 5.87893L8.77034 5.92112C9.22887 5.93665 9.67194 5.75322 9.98518 5.41799L10.8391 4.50393ZM12 8.00002C10.6746 8.00005 9.60002 9.07455 9.60002 10.4C9.60002 11.7255 10.6746 12.8 12 12.8C13.3255 12.8 14.4 11.7255 14.4 10.4C14.4 9.07454 13.3255 8.00002 12 8.00002Z" fill-rule="evenodd" clip-rule="evenodd" fill="#9F87F7"></path><path opacity="0.5" d="M17.6044 17.707C17.3352 17.953 16.9803 18.108 16.5873 18.1213C16.5515 18.1225 16.5156 18.1225 16.4797 18.1213L15.2296 18.0789C14.771 18.0634 14.3282 18.2468 14.0149 18.582L13.1609 19.496C12.5618 20.1371 11.5565 20.1711 10.9154 19.5721C10.8891 19.5476 10.8638 19.5222 10.8392 19.496L9.98524 18.582C9.672 18.2468 9.22913 18.0634 8.77059 18.0789L7.52048 18.1213C7.08877 18.1359 6.69145 17.9769 6.39575 17.707C7.48631 15.7352 9.58727 14.4 12.0001 14.4C14.4129 14.4 16.5139 15.7352 17.6044 17.707ZM12.0001 8C13.3256 8 14.4001 9.07452 14.4001 10.4C14.4001 11.7255 13.3256 12.8 12.0001 12.8C10.6746 12.8 9.60009 11.7255 9.60009 10.4C9.60009 9.07452 10.6746 8 12.0001 8Z" fill-rule="evenodd" clip-rule="evenodd" fill="#9F87F7"></path></svg><span>от собственника</span></div> <div class="web-sticker test-sticker"><svg class="test-icon" viewBox="4 4 16 16" aria-hidden="true"><path d="M13.0294 4.55071C13.7002 4.55071 14.345 4.81345 14.8233 5.28375L19.5141 9.89816C20.1585 10.5323 20.1624 11.5697 19.5231 12.209L17.5965 14.1365C16.9608 14.7719 15.9295 14.7722 15.2939 14.1365L13.7279 12.5696L9.40868 17.3212C8.54489 18.271 7.01767 18.3123 6.11138 17.3502C5.23085 16.4154 5.31146 14.9336 6.2885 14.1002L11.0582 10.0317L8.355 7.32844C7.32989 6.30307 8.05603 4.55009 9.50587 4.5498L13.0294 4.55071Z" fill="#DB001C"/></svg></div> <div class="web-sticker test-sticker"><svg class="test-icon" viewBox="4 4 16 16" aria-hidden="true"><path d="M4.96979 5.09473C5.26269 4.80186 5.73746 4.80184 6.03034 5.09473L19.0303 18.0947C19.3232 18.3876 19.3232 18.8624 19.0303 19.1553C18.7375 19.4482 18.2627 19.4481 17.9698 19.1553L16.9298 18.1152C16.5767 18.4308 16.1128 18.625 15.6016 18.625H8.3985C7.29403 18.6249 6.3985 17.7295 6.3985 16.625V11.1846C6.39868 10.2204 6.74773 9.2898 7.378 8.56348L4.96979 6.15527C4.6769 5.86238 4.6769 5.38762 4.96979 5.09473Z" fill="#DB001C"/><path d="M15.6016 4.625C16.7062 4.625 17.6016 5.52043 17.6016 6.625V14.5557L9.40339 6.35742L10.1075 5.59375C10.6755 4.97643 11.4767 4.62512 12.3155 4.625H15.6016Z" fill="#DB001C"/></svg></div>
+  </div>
+</div>
+
+<div class="section alpha alpha-32">
+  <h2>hover alpha 32%</h2>
+  <div class="price-list">
+    <div class="web-sticker normal">нормальная цена <svg class="chevron" viewBox="0 0 10 7" fill="none"><path d="M1 1.5L5 5.5L9 1.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div class="web-sticker good">хорошая цена <svg class="chevron" viewBox="0 0 10 7" fill="none"><path d="M1 1.5L5 5.5L9 1.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div class="web-sticker excellent">отличная цена <svg class="chevron" viewBox="0 0 10 7" fill="none"><path d="M1 1.5L5 5.5L9 1.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div class="web-sticker high">высокая цена <svg class="chevron" viewBox="0 0 10 7" fill="none"><path d="M1 1.5L5 5.5L9 1.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div class="web-sticker unrated">без оценки <svg class="chevron" viewBox="0 0 10 7" fill="none"><path d="M1 1.5L5 5.5L9 1.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div class="web-sticker certified">сертифицирован</div>
+    <div class="web-sticker owner owner-sticker"><svg class="owner-icon" width="16" height="16" viewBox="4 4 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M10.8391 19.4961C10.8636 19.5223 10.8894 19.5474 10.9156 19.5719C10.9071 19.5639 10.8983 19.5559 10.8899 19.5477C10.8726 19.5308 10.8556 19.5137 10.8391 19.4961Z" fill="#9F87F7"></path><path d="M10.8391 4.50393C11.4381 3.86287 12.4433 3.82917 13.0844 4.42815C13.1106 4.45265 13.1365 4.47772 13.161 4.50393L14.0149 5.41799C14.3281 5.75322 14.7712 5.93665 15.2297 5.92112L16.4797 5.87893C17.3565 5.84927 18.0913 6.53573 18.1211 7.41252C18.1223 7.44837 18.1223 7.48449 18.1211 7.52034L18.0789 8.77034C18.0634 9.22888 18.2468 9.67192 18.5821 9.98518L19.4961 10.8391C20.1372 11.4381 20.1709 12.4433 19.5719 13.0844C19.5474 13.1106 19.5223 13.1365 19.4961 13.161L18.5821 14.0149C18.2468 14.3281 18.0634 14.7712 18.0789 15.2297L18.1211 16.4797C18.1375 16.9635 17.9361 17.4042 17.6047 17.7071C16.5142 15.7352 14.4128 14.4 12 14.4C9.58729 14.4 7.48669 15.7353 6.39612 17.7071C6.09133 17.4288 5.89409 17.0326 5.87893 16.5875C5.87772 16.5517 5.87772 16.5156 5.87893 16.4797L5.92112 15.2297C5.93666 14.7712 5.75321 14.3281 5.41799 14.0149L4.50393 13.161C3.86287 12.5619 3.82918 11.5568 4.42815 10.9157C4.45265 10.8894 4.47772 10.8636 4.50393 10.8391L5.41799 9.98518C5.75321 9.67192 5.93666 9.22888 5.92112 8.77034L5.87893 7.52034C5.84924 6.6435 6.53572 5.90881 7.41252 5.87893C7.44836 5.87774 7.4845 5.87774 7.52034 5.87893L8.77034 5.92112C9.22887 5.93665 9.67194 5.75322 9.98518 5.41799L10.8391 4.50393ZM12 8.00002C10.6746 8.00005 9.60002 9.07455 9.60002 10.4C9.60002 11.7255 10.6746 12.8 12 12.8C13.3255 12.8 14.4 11.7255 14.4 10.4C14.4 9.07454 13.3255 8.00002 12 8.00002Z" fill-rule="evenodd" clip-rule="evenodd" fill="#9F87F7"></path><path opacity="0.5" d="M17.6044 17.707C17.3352 17.953 16.9803 18.108 16.5873 18.1213C16.5515 18.1225 16.5156 18.1225 16.4797 18.1213L15.2296 18.0789C14.771 18.0634 14.3282 18.2468 14.0149 18.582L13.1609 19.496C12.5618 20.1371 11.5565 20.1711 10.9154 19.5721C10.8891 19.5476 10.8638 19.5222 10.8392 19.496L9.98524 18.582C9.672 18.2468 9.22913 18.0634 8.77059 18.0789L7.52048 18.1213C7.08877 18.1359 6.69145 17.9769 6.39575 17.707C7.48631 15.7352 9.58727 14.4 12.0001 14.4C14.4129 14.4 16.5139 15.7352 17.6044 17.707ZM12.0001 8C13.3256 8 14.4001 9.07452 14.4001 10.4C14.4001 11.7255 13.3256 12.8 12.0001 12.8C10.6746 12.8 9.60009 11.7255 9.60009 10.4C9.60009 9.07452 10.6746 8 12.0001 8Z" fill-rule="evenodd" clip-rule="evenodd" fill="#9F87F7"></path></svg><span>от собственника</span></div> <div class="web-sticker test-sticker"><svg class="test-icon" viewBox="4 4 16 16" aria-hidden="true"><path d="M13.0294 4.55071C13.7002 4.55071 14.345 4.81345 14.8233 5.28375L19.5141 9.89816C20.1585 10.5323 20.1624 11.5697 19.5231 12.209L17.5965 14.1365C16.9608 14.7719 15.9295 14.7722 15.2939 14.1365L13.7279 12.5696L9.40868 17.3212C8.54489 18.271 7.01767 18.3123 6.11138 17.3502C5.23085 16.4154 5.31146 14.9336 6.2885 14.1002L11.0582 10.0317L8.355 7.32844C7.32989 6.30307 8.05603 4.55009 9.50587 4.5498L13.0294 4.55071Z" fill="#DB001C"/></svg></div> <div class="web-sticker test-sticker"><svg class="test-icon" viewBox="4 4 16 16" aria-hidden="true"><path d="M4.96979 5.09473C5.26269 4.80186 5.73746 4.80184 6.03034 5.09473L19.0303 18.0947C19.3232 18.3876 19.3232 18.8624 19.0303 19.1553C18.7375 19.4482 18.2627 19.4481 17.9698 19.1553L16.9298 18.1152C16.5767 18.4308 16.1128 18.625 15.6016 18.625H8.3985C7.29403 18.6249 6.3985 17.7295 6.3985 16.625V11.1846C6.39868 10.2204 6.74773 9.2898 7.378 8.56348L4.96979 6.15527C4.6769 5.86238 4.6769 5.38762 4.96979 5.09473Z" fill="#DB001C"/><path d="M15.6016 4.625C16.7062 4.625 17.6016 5.52043 17.6016 6.625V14.5557L9.40339 6.35742L10.1075 5.59375C10.6755 4.97643 11.4767 4.62512 12.3155 4.625H15.6016Z" fill="#DB001C"/></svg></div>
+  </div>
+</div>
+
+<div class="section black">
+  <h2>hover black 4%</h2>
+  <div class="price-list">
+    <div class="web-sticker normal">нормальная цена <svg class="chevron" viewBox="0 0 10 7" fill="none"><path d="M1 1.5L5 5.5L9 1.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div class="web-sticker good">хорошая цена <svg class="chevron" viewBox="0 0 10 7" fill="none"><path d="M1 1.5L5 5.5L9 1.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div class="web-sticker excellent">отличная цена <svg class="chevron" viewBox="0 0 10 7" fill="none"><path d="M1 1.5L5 5.5L9 1.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div class="web-sticker high">высокая цена <svg class="chevron" viewBox="0 0 10 7" fill="none"><path d="M1 1.5L5 5.5L9 1.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div class="web-sticker unrated">без оценки <svg class="chevron" viewBox="0 0 10 7" fill="none"><path d="M1 1.5L5 5.5L9 1.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div class="web-sticker certified">сертифицирован</div>
+    <div class="web-sticker owner owner-sticker"><svg class="owner-icon" width="16" height="16" viewBox="4 4 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M10.8391 19.4961C10.8636 19.5223 10.8894 19.5474 10.9156 19.5719C10.9071 19.5639 10.8983 19.5559 10.8899 19.5477C10.8726 19.5308 10.8556 19.5137 10.8391 19.4961Z" fill="#9F87F7"></path><path d="M10.8391 4.50393C11.4381 3.86287 12.4433 3.82917 13.0844 4.42815C13.1106 4.45265 13.1365 4.47772 13.161 4.50393L14.0149 5.41799C14.3281 5.75322 14.7712 5.93665 15.2297 5.92112L16.4797 5.87893C17.3565 5.84927 18.0913 6.53573 18.1211 7.41252C18.1223 7.44837 18.1223 7.48449 18.1211 7.52034L18.0789 8.77034C18.0634 9.22888 18.2468 9.67192 18.5821 9.98518L19.4961 10.8391C20.1372 11.4381 20.1709 12.4433 19.5719 13.0844C19.5474 13.1106 19.5223 13.1365 19.4961 13.161L18.5821 14.0149C18.2468 14.3281 18.0634 14.7712 18.0789 15.2297L18.1211 16.4797C18.1375 16.9635 17.9361 17.4042 17.6047 17.7071C16.5142 15.7352 14.4128 14.4 12 14.4C9.58729 14.4 7.48669 15.7353 6.39612 17.7071C6.09133 17.4288 5.89409 17.0326 5.87893 16.5875C5.87772 16.5517 5.87772 16.5156 5.87893 16.4797L5.92112 15.2297C5.93666 14.7712 5.75321 14.3281 5.41799 14.0149L4.50393 13.161C3.86287 12.5619 3.82918 11.5568 4.42815 10.9157C4.45265 10.8894 4.47772 10.8636 4.50393 10.8391L5.41799 9.98518C5.75321 9.67192 5.93666 9.22888 5.92112 8.77034L5.87893 7.52034C5.84924 6.6435 6.53572 5.90881 7.41252 5.87893C7.44836 5.87774 7.4845 5.87774 7.52034 5.87893L8.77034 5.92112C9.22887 5.93665 9.67194 5.75322 9.98518 5.41799L10.8391 4.50393ZM12 8.00002C10.6746 8.00005 9.60002 9.07455 9.60002 10.4C9.60002 11.7255 10.6746 12.8 12 12.8C13.3255 12.8 14.4 11.7255 14.4 10.4C14.4 9.07454 13.3255 8.00002 12 8.00002Z" fill-rule="evenodd" clip-rule="evenodd" fill="#9F87F7"></path><path opacity="0.5" d="M17.6044 17.707C17.3352 17.953 16.9803 18.108 16.5873 18.1213C16.5515 18.1225 16.5156 18.1225 16.4797 18.1213L15.2296 18.0789C14.771 18.0634 14.3282 18.2468 14.0149 18.582L13.1609 19.496C12.5618 20.1371 11.5565 20.1711 10.9154 19.5721C10.8891 19.5476 10.8638 19.5222 10.8392 19.496L9.98524 18.582C9.672 18.2468 9.22913 18.0634 8.77059 18.0789L7.52048 18.1213C7.08877 18.1359 6.69145 17.9769 6.39575 17.707C7.48631 15.7352 9.58727 14.4 12.0001 14.4C14.4129 14.4 16.5139 15.7352 17.6044 17.707ZM12.0001 8C13.3256 8 14.4001 9.07452 14.4001 10.4C14.4001 11.7255 13.3256 12.8 12.0001 12.8C10.6746 12.8 9.60009 11.7255 9.60009 10.4C9.60009 9.07452 10.6746 8 12.0001 8Z" fill-rule="evenodd" clip-rule="evenodd" fill="#9F87F7"></path></svg><span>от собственника</span></div> <div class="web-sticker test-sticker"><svg class="test-icon" viewBox="4 4 16 16" aria-hidden="true"><path d="M13.0294 4.55071C13.7002 4.55071 14.345 4.81345 14.8233 5.28375L19.5141 9.89816C20.1585 10.5323 20.1624 11.5697 19.5231 12.209L17.5965 14.1365C16.9608 14.7719 15.9295 14.7722 15.2939 14.1365L13.7279 12.5696L9.40868 17.3212C8.54489 18.271 7.01767 18.3123 6.11138 17.3502C5.23085 16.4154 5.31146 14.9336 6.2885 14.1002L11.0582 10.0317L8.355 7.32844C7.32989 6.30307 8.05603 4.55009 9.50587 4.5498L13.0294 4.55071Z" fill="#DB001C"/></svg></div> <div class="web-sticker test-sticker"><svg class="test-icon" viewBox="4 4 16 16" aria-hidden="true"><path d="M4.96979 5.09473C5.26269 4.80186 5.73746 4.80184 6.03034 5.09473L19.0303 18.0947C19.3232 18.3876 19.3232 18.8624 19.0303 19.1553C18.7375 19.4482 18.2627 19.4481 17.9698 19.1553L16.9298 18.1152C16.5767 18.4308 16.1128 18.625 15.6016 18.625H8.3985C7.29403 18.6249 6.3985 17.7295 6.3985 16.625V11.1846C6.39868 10.2204 6.74773 9.2898 7.378 8.56348L4.96979 6.15527C4.6769 5.86238 4.6769 5.38762 4.96979 5.09473Z" fill="#DB001C"/><path d="M15.6016 4.625C16.7062 4.625 17.6016 5.52043 17.6016 6.625V14.5557L9.40339 6.35742L10.1075 5.59375C10.6755 4.97643 11.4767 4.62512 12.3155 4.625H15.6016Z" fill="#DB001C"/></svg></div>
+  </div>
+</div>
+</div>
+<div class="theme-panel theme-dark">
+<div class="section hsl">
+  <h2>hover HSL +4%</h2>
+  <div class="price-list">
+    <div class="web-sticker normal">нормальная цена <svg class="chevron" viewBox="0 0 10 7" fill="none"><path d="M1 1.5L5 5.5L9 1.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div class="web-sticker good">хорошая цена <svg class="chevron" viewBox="0 0 10 7" fill="none"><path d="M1 1.5L5 5.5L9 1.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div class="web-sticker excellent">отличная цена <svg class="chevron" viewBox="0 0 10 7" fill="none"><path d="M1 1.5L5 5.5L9 1.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div class="web-sticker high">высокая цена <svg class="chevron" viewBox="0 0 10 7" fill="none"><path d="M1 1.5L5 5.5L9 1.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div class="web-sticker unrated">без оценки <svg class="chevron" viewBox="0 0 10 7" fill="none"><path d="M1 1.5L5 5.5L9 1.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div class="web-sticker certified">сертифицирован</div>
+    <div class="web-sticker owner owner-sticker"><svg class="owner-icon" width="16" height="16" viewBox="4 4 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M10.8391 19.4961C10.8636 19.5223 10.8894 19.5474 10.9156 19.5719C10.9071 19.5639 10.8983 19.5559 10.8899 19.5477C10.8726 19.5308 10.8556 19.5137 10.8391 19.4961Z" fill="#9F87F7"></path><path d="M10.8391 4.50393C11.4381 3.86287 12.4433 3.82917 13.0844 4.42815C13.1106 4.45265 13.1365 4.47772 13.161 4.50393L14.0149 5.41799C14.3281 5.75322 14.7712 5.93665 15.2297 5.92112L16.4797 5.87893C17.3565 5.84927 18.0913 6.53573 18.1211 7.41252C18.1223 7.44837 18.1223 7.48449 18.1211 7.52034L18.0789 8.77034C18.0634 9.22888 18.2468 9.67192 18.5821 9.98518L19.4961 10.8391C20.1372 11.4381 20.1709 12.4433 19.5719 13.0844C19.5474 13.1106 19.5223 13.1365 19.4961 13.161L18.5821 14.0149C18.2468 14.3281 18.0634 14.7712 18.0789 15.2297L18.1211 16.4797C18.1375 16.9635 17.9361 17.4042 17.6047 17.7071C16.5142 15.7352 14.4128 14.4 12 14.4C9.58729 14.4 7.48669 15.7353 6.39612 17.7071C6.09133 17.4288 5.89409 17.0326 5.87893 16.5875C5.87772 16.5517 5.87772 16.5156 5.87893 16.4797L5.92112 15.2297C5.93666 14.7712 5.75321 14.3281 5.41799 14.0149L4.50393 13.161C3.86287 12.5619 3.82918 11.5568 4.42815 10.9157C4.45265 10.8894 4.47772 10.8636 4.50393 10.8391L5.41799 9.98518C5.75321 9.67192 5.93666 9.22888 5.92112 8.77034L5.87893 7.52034C5.84924 6.6435 6.53572 5.90881 7.41252 5.87893C7.44836 5.87774 7.4845 5.87774 7.52034 5.87893L8.77034 5.92112C9.22887 5.93665 9.67194 5.75322 9.98518 5.41799L10.8391 4.50393ZM12 8.00002C10.6746 8.00005 9.60002 9.07455 9.60002 10.4C9.60002 11.7255 10.6746 12.8 12 12.8C13.3255 12.8 14.4 11.7255 14.4 10.4C14.4 9.07454 13.3255 8.00002 12 8.00002Z" fill-rule="evenodd" clip-rule="evenodd" fill="#9F87F7"></path><path opacity="0.5" d="M17.6044 17.707C17.3352 17.953 16.9803 18.108 16.5873 18.1213C16.5515 18.1225 16.5156 18.1225 16.4797 18.1213L15.2296 18.0789C14.771 18.0634 14.3282 18.2468 14.0149 18.582L13.1609 19.496C12.5618 20.1371 11.5565 20.1711 10.9154 19.5721C10.8891 19.5476 10.8638 19.5222 10.8392 19.496L9.98524 18.582C9.672 18.2468 9.22913 18.0634 8.77059 18.0789L7.52048 18.1213C7.08877 18.1359 6.69145 17.9769 6.39575 17.707C7.48631 15.7352 9.58727 14.4 12.0001 14.4C14.4129 14.4 16.5139 15.7352 17.6044 17.707ZM12.0001 8C13.3256 8 14.4001 9.07452 14.4001 10.4C14.4001 11.7255 13.3256 12.8 12.0001 12.8C10.6746 12.8 9.60009 11.7255 9.60009 10.4C9.60009 9.07452 10.6746 8 12.0001 8Z" fill-rule="evenodd" clip-rule="evenodd" fill="#9F87F7"></path></svg><span>от собственника</span></div> <div class="web-sticker test-sticker"><svg class="test-icon" viewBox="4 4 16 16" aria-hidden="true"><path d="M13.0294 4.55071C13.7002 4.55071 14.345 4.81345 14.8233 5.28375L19.5141 9.89816C20.1585 10.5323 20.1624 11.5697 19.5231 12.209L17.5965 14.1365C16.9608 14.7719 15.9295 14.7722 15.2939 14.1365L13.7279 12.5696L9.40868 17.3212C8.54489 18.271 7.01767 18.3123 6.11138 17.3502C5.23085 16.4154 5.31146 14.9336 6.2885 14.1002L11.0582 10.0317L8.355 7.32844C7.32989 6.30307 8.05603 4.55009 9.50587 4.5498L13.0294 4.55071Z" fill="#DB001C"/></svg></div> <div class="web-sticker test-sticker"><svg class="test-icon" viewBox="4 4 16 16" aria-hidden="true"><path d="M4.96979 5.09473C5.26269 4.80186 5.73746 4.80184 6.03034 5.09473L19.0303 18.0947C19.3232 18.3876 19.3232 18.8624 19.0303 19.1553C18.7375 19.4482 18.2627 19.4481 17.9698 19.1553L16.9298 18.1152C16.5767 18.4308 16.1128 18.625 15.6016 18.625H8.3985C7.29403 18.6249 6.3985 17.7295 6.3985 16.625V11.1846C6.39868 10.2204 6.74773 9.2898 7.378 8.56348L4.96979 6.15527C4.6769 5.86238 4.6769 5.38762 4.96979 5.09473Z" fill="#DB001C"/><path d="M15.6016 4.625C16.7062 4.625 17.6016 5.52043 17.6016 6.625V14.5557L9.40339 6.35742L10.1075 5.59375C10.6755 4.97643 11.4767 4.62512 12.3155 4.625H15.6016Z" fill="#DB001C"/></svg></div>
+  </div>
+</div>
+
+<div class="section alpha">
+  <h2>hover alpha 24%</h2>
+  <div class="price-list">
+    <div class="web-sticker normal">нормальная цена <svg class="chevron" viewBox="0 0 10 7" fill="none"><path d="M1 1.5L5 5.5L9 1.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div class="web-sticker good">хорошая цена <svg class="chevron" viewBox="0 0 10 7" fill="none"><path d="M1 1.5L5 5.5L9 1.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div class="web-sticker excellent">отличная цена <svg class="chevron" viewBox="0 0 10 7" fill="none"><path d="M1 1.5L5 5.5L9 1.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div class="web-sticker high">высокая цена <svg class="chevron" viewBox="0 0 10 7" fill="none"><path d="M1 1.5L5 5.5L9 1.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div class="web-sticker unrated">без оценки <svg class="chevron" viewBox="0 0 10 7" fill="none"><path d="M1 1.5L5 5.5L9 1.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div class="web-sticker certified">сертифицирован</div>
+    <div class="web-sticker owner owner-sticker"><svg class="owner-icon" width="16" height="16" viewBox="4 4 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M10.8391 19.4961C10.8636 19.5223 10.8894 19.5474 10.9156 19.5719C10.9071 19.5639 10.8983 19.5559 10.8899 19.5477C10.8726 19.5308 10.8556 19.5137 10.8391 19.4961Z" fill="#9F87F7"></path><path d="M10.8391 4.50393C11.4381 3.86287 12.4433 3.82917 13.0844 4.42815C13.1106 4.45265 13.1365 4.47772 13.161 4.50393L14.0149 5.41799C14.3281 5.75322 14.7712 5.93665 15.2297 5.92112L16.4797 5.87893C17.3565 5.84927 18.0913 6.53573 18.1211 7.41252C18.1223 7.44837 18.1223 7.48449 18.1211 7.52034L18.0789 8.77034C18.0634 9.22888 18.2468 9.67192 18.5821 9.98518L19.4961 10.8391C20.1372 11.4381 20.1709 12.4433 19.5719 13.0844C19.5474 13.1106 19.5223 13.1365 19.4961 13.161L18.5821 14.0149C18.2468 14.3281 18.0634 14.7712 18.0789 15.2297L18.1211 16.4797C18.1375 16.9635 17.9361 17.4042 17.6047 17.7071C16.5142 15.7352 14.4128 14.4 12 14.4C9.58729 14.4 7.48669 15.7353 6.39612 17.7071C6.09133 17.4288 5.89409 17.0326 5.87893 16.5875C5.87772 16.5517 5.87772 16.5156 5.87893 16.4797L5.92112 15.2297C5.93666 14.7712 5.75321 14.3281 5.41799 14.0149L4.50393 13.161C3.86287 12.5619 3.82918 11.5568 4.42815 10.9157C4.45265 10.8894 4.47772 10.8636 4.50393 10.8391L5.41799 9.98518C5.75321 9.67192 5.93666 9.22888 5.92112 8.77034L5.87893 7.52034C5.84924 6.6435 6.53572 5.90881 7.41252 5.87893C7.44836 5.87774 7.4845 5.87774 7.52034 5.87893L8.77034 5.92112C9.22887 5.93665 9.67194 5.75322 9.98518 5.41799L10.8391 4.50393ZM12 8.00002C10.6746 8.00005 9.60002 9.07455 9.60002 10.4C9.60002 11.7255 10.6746 12.8 12 12.8C13.3255 12.8 14.4 11.7255 14.4 10.4C14.4 9.07454 13.3255 8.00002 12 8.00002Z" fill-rule="evenodd" clip-rule="evenodd" fill="#9F87F7"></path><path opacity="0.5" d="M17.6044 17.707C17.3352 17.953 16.9803 18.108 16.5873 18.1213C16.5515 18.1225 16.5156 18.1225 16.4797 18.1213L15.2296 18.0789C14.771 18.0634 14.3282 18.2468 14.0149 18.582L13.1609 19.496C12.5618 20.1371 11.5565 20.1711 10.9154 19.5721C10.8891 19.5476 10.8638 19.5222 10.8392 19.496L9.98524 18.582C9.672 18.2468 9.22913 18.0634 8.77059 18.0789L7.52048 18.1213C7.08877 18.1359 6.69145 17.9769 6.39575 17.707C7.48631 15.7352 9.58727 14.4 12.0001 14.4C14.4129 14.4 16.5139 15.7352 17.6044 17.707ZM12.0001 8C13.3256 8 14.4001 9.07452 14.4001 10.4C14.4001 11.7255 13.3256 12.8 12.0001 12.8C10.6746 12.8 9.60009 11.7255 9.60009 10.4C9.60009 9.07452 10.6746 8 12.0001 8Z" fill-rule="evenodd" clip-rule="evenodd" fill="#9F87F7"></path></svg><span>от собственника</span></div> <div class="web-sticker test-sticker"><svg class="test-icon" viewBox="4 4 16 16" aria-hidden="true"><path d="M13.0294 4.55071C13.7002 4.55071 14.345 4.81345 14.8233 5.28375L19.5141 9.89816C20.1585 10.5323 20.1624 11.5697 19.5231 12.209L17.5965 14.1365C16.9608 14.7719 15.9295 14.7722 15.2939 14.1365L13.7279 12.5696L9.40868 17.3212C8.54489 18.271 7.01767 18.3123 6.11138 17.3502C5.23085 16.4154 5.31146 14.9336 6.2885 14.1002L11.0582 10.0317L8.355 7.32844C7.32989 6.30307 8.05603 4.55009 9.50587 4.5498L13.0294 4.55071Z" fill="#DB001C"/></svg></div> <div class="web-sticker test-sticker"><svg class="test-icon" viewBox="4 4 16 16" aria-hidden="true"><path d="M4.96979 5.09473C5.26269 4.80186 5.73746 4.80184 6.03034 5.09473L19.0303 18.0947C19.3232 18.3876 19.3232 18.8624 19.0303 19.1553C18.7375 19.4482 18.2627 19.4481 17.9698 19.1553L16.9298 18.1152C16.5767 18.4308 16.1128 18.625 15.6016 18.625H8.3985C7.29403 18.6249 6.3985 17.7295 6.3985 16.625V11.1846C6.39868 10.2204 6.74773 9.2898 7.378 8.56348L4.96979 6.15527C4.6769 5.86238 4.6769 5.38762 4.96979 5.09473Z" fill="#DB001C"/><path d="M15.6016 4.625C16.7062 4.625 17.6016 5.52043 17.6016 6.625V14.5557L9.40339 6.35742L10.1075 5.59375C10.6755 4.97643 11.4767 4.62512 12.3155 4.625H15.6016Z" fill="#DB001C"/></svg></div>
+  </div>
+</div>
+
+<div class="section alpha alpha-32">
+  <h2>hover alpha 32%</h2>
+  <div class="price-list">
+    <div class="web-sticker normal">нормальная цена <svg class="chevron" viewBox="0 0 10 7" fill="none"><path d="M1 1.5L5 5.5L9 1.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div class="web-sticker good">хорошая цена <svg class="chevron" viewBox="0 0 10 7" fill="none"><path d="M1 1.5L5 5.5L9 1.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div class="web-sticker excellent">отличная цена <svg class="chevron" viewBox="0 0 10 7" fill="none"><path d="M1 1.5L5 5.5L9 1.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div class="web-sticker high">высокая цена <svg class="chevron" viewBox="0 0 10 7" fill="none"><path d="M1 1.5L5 5.5L9 1.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div class="web-sticker unrated">без оценки <svg class="chevron" viewBox="0 0 10 7" fill="none"><path d="M1 1.5L5 5.5L9 1.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div class="web-sticker certified">сертифицирован</div>
+    <div class="web-sticker owner owner-sticker"><svg class="owner-icon" width="16" height="16" viewBox="4 4 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M10.8391 19.4961C10.8636 19.5223 10.8894 19.5474 10.9156 19.5719C10.9071 19.5639 10.8983 19.5559 10.8899 19.5477C10.8726 19.5308 10.8556 19.5137 10.8391 19.4961Z" fill="#9F87F7"></path><path d="M10.8391 4.50393C11.4381 3.86287 12.4433 3.82917 13.0844 4.42815C13.1106 4.45265 13.1365 4.47772 13.161 4.50393L14.0149 5.41799C14.3281 5.75322 14.7712 5.93665 15.2297 5.92112L16.4797 5.87893C17.3565 5.84927 18.0913 6.53573 18.1211 7.41252C18.1223 7.44837 18.1223 7.48449 18.1211 7.52034L18.0789 8.77034C18.0634 9.22888 18.2468 9.67192 18.5821 9.98518L19.4961 10.8391C20.1372 11.4381 20.1709 12.4433 19.5719 13.0844C19.5474 13.1106 19.5223 13.1365 19.4961 13.161L18.5821 14.0149C18.2468 14.3281 18.0634 14.7712 18.0789 15.2297L18.1211 16.4797C18.1375 16.9635 17.9361 17.4042 17.6047 17.7071C16.5142 15.7352 14.4128 14.4 12 14.4C9.58729 14.4 7.48669 15.7353 6.39612 17.7071C6.09133 17.4288 5.89409 17.0326 5.87893 16.5875C5.87772 16.5517 5.87772 16.5156 5.87893 16.4797L5.92112 15.2297C5.93666 14.7712 5.75321 14.3281 5.41799 14.0149L4.50393 13.161C3.86287 12.5619 3.82918 11.5568 4.42815 10.9157C4.45265 10.8894 4.47772 10.8636 4.50393 10.8391L5.41799 9.98518C5.75321 9.67192 5.93666 9.22888 5.92112 8.77034L5.87893 7.52034C5.84924 6.6435 6.53572 5.90881 7.41252 5.87893C7.44836 5.87774 7.4845 5.87774 7.52034 5.87893L8.77034 5.92112C9.22887 5.93665 9.67194 5.75322 9.98518 5.41799L10.8391 4.50393ZM12 8.00002C10.6746 8.00005 9.60002 9.07455 9.60002 10.4C9.60002 11.7255 10.6746 12.8 12 12.8C13.3255 12.8 14.4 11.7255 14.4 10.4C14.4 9.07454 13.3255 8.00002 12 8.00002Z" fill-rule="evenodd" clip-rule="evenodd" fill="#9F87F7"></path><path opacity="0.5" d="M17.6044 17.707C17.3352 17.953 16.9803 18.108 16.5873 18.1213C16.5515 18.1225 16.5156 18.1225 16.4797 18.1213L15.2296 18.0789C14.771 18.0634 14.3282 18.2468 14.0149 18.582L13.1609 19.496C12.5618 20.1371 11.5565 20.1711 10.9154 19.5721C10.8891 19.5476 10.8638 19.5222 10.8392 19.496L9.98524 18.582C9.672 18.2468 9.22913 18.0634 8.77059 18.0789L7.52048 18.1213C7.08877 18.1359 6.69145 17.9769 6.39575 17.707C7.48631 15.7352 9.58727 14.4 12.0001 14.4C14.4129 14.4 16.5139 15.7352 17.6044 17.707ZM12.0001 8C13.3256 8 14.4001 9.07452 14.4001 10.4C14.4001 11.7255 13.3256 12.8 12.0001 12.8C10.6746 12.8 9.60009 11.7255 9.60009 10.4C9.60009 9.07452 10.6746 8 12.0001 8Z" fill-rule="evenodd" clip-rule="evenodd" fill="#9F87F7"></path></svg><span>от собственника</span></div> <div class="web-sticker test-sticker"><svg class="test-icon" viewBox="4 4 16 16" aria-hidden="true"><path d="M13.0294 4.55071C13.7002 4.55071 14.345 4.81345 14.8233 5.28375L19.5141 9.89816C20.1585 10.5323 20.1624 11.5697 19.5231 12.209L17.5965 14.1365C16.9608 14.7719 15.9295 14.7722 15.2939 14.1365L13.7279 12.5696L9.40868 17.3212C8.54489 18.271 7.01767 18.3123 6.11138 17.3502C5.23085 16.4154 5.31146 14.9336 6.2885 14.1002L11.0582 10.0317L8.355 7.32844C7.32989 6.30307 8.05603 4.55009 9.50587 4.5498L13.0294 4.55071Z" fill="#DB001C"/></svg></div> <div class="web-sticker test-sticker"><svg class="test-icon" viewBox="4 4 16 16" aria-hidden="true"><path d="M4.96979 5.09473C5.26269 4.80186 5.73746 4.80184 6.03034 5.09473L19.0303 18.0947C19.3232 18.3876 19.3232 18.8624 19.0303 19.1553C18.7375 19.4482 18.2627 19.4481 17.9698 19.1553L16.9298 18.1152C16.5767 18.4308 16.1128 18.625 15.6016 18.625H8.3985C7.29403 18.6249 6.3985 17.7295 6.3985 16.625V11.1846C6.39868 10.2204 6.74773 9.2898 7.378 8.56348L4.96979 6.15527C4.6769 5.86238 4.6769 5.38762 4.96979 5.09473Z" fill="#DB001C"/><path d="M15.6016 4.625C16.7062 4.625 17.6016 5.52043 17.6016 6.625V14.5557L9.40339 6.35742L10.1075 5.59375C10.6755 4.97643 11.4767 4.62512 12.3155 4.625H15.6016Z" fill="#DB001C"/></svg></div>
+  </div>
+</div>
+
+<div class="section black">
+  <h2>hover white 4%</h2>
+  <div class="price-list">
+    <div class="web-sticker normal">нормальная цена <svg class="chevron" viewBox="0 0 10 7" fill="none"><path d="M1 1.5L5 5.5L9 1.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div class="web-sticker good">хорошая цена <svg class="chevron" viewBox="0 0 10 7" fill="none"><path d="M1 1.5L5 5.5L9 1.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div class="web-sticker excellent">отличная цена <svg class="chevron" viewBox="0 0 10 7" fill="none"><path d="M1 1.5L5 5.5L9 1.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div class="web-sticker high">высокая цена <svg class="chevron" viewBox="0 0 10 7" fill="none"><path d="M1 1.5L5 5.5L9 1.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div class="web-sticker unrated">без оценки <svg class="chevron" viewBox="0 0 10 7" fill="none"><path d="M1 1.5L5 5.5L9 1.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div class="web-sticker certified">сертифицирован</div>
+    <div class="web-sticker owner owner-sticker"><svg class="owner-icon" width="16" height="16" viewBox="4 4 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M10.8391 19.4961C10.8636 19.5223 10.8894 19.5474 10.9156 19.5719C10.9071 19.5639 10.8983 19.5559 10.8899 19.5477C10.8726 19.5308 10.8556 19.5137 10.8391 19.4961Z" fill="#9F87F7"></path><path d="M10.8391 4.50393C11.4381 3.86287 12.4433 3.82917 13.0844 4.42815C13.1106 4.45265 13.1365 4.47772 13.161 4.50393L14.0149 5.41799C14.3281 5.75322 14.7712 5.93665 15.2297 5.92112L16.4797 5.87893C17.3565 5.84927 18.0913 6.53573 18.1211 7.41252C18.1223 7.44837 18.1223 7.48449 18.1211 7.52034L18.0789 8.77034C18.0634 9.22888 18.2468 9.67192 18.5821 9.98518L19.4961 10.8391C20.1372 11.4381 20.1709 12.4433 19.5719 13.0844C19.5474 13.1106 19.5223 13.1365 19.4961 13.161L18.5821 14.0149C18.2468 14.3281 18.0634 14.7712 18.0789 15.2297L18.1211 16.4797C18.1375 16.9635 17.9361 17.4042 17.6047 17.7071C16.5142 15.7352 14.4128 14.4 12 14.4C9.58729 14.4 7.48669 15.7353 6.39612 17.7071C6.09133 17.4288 5.89409 17.0326 5.87893 16.5875C5.87772 16.5517 5.87772 16.5156 5.87893 16.4797L5.92112 15.2297C5.93666 14.7712 5.75321 14.3281 5.41799 14.0149L4.50393 13.161C3.86287 12.5619 3.82918 11.5568 4.42815 10.9157C4.45265 10.8894 4.47772 10.8636 4.50393 10.8391L5.41799 9.98518C5.75321 9.67192 5.93666 9.22888 5.92112 8.77034L5.87893 7.52034C5.84924 6.6435 6.53572 5.90881 7.41252 5.87893C7.44836 5.87774 7.4845 5.87774 7.52034 5.87893L8.77034 5.92112C9.22887 5.93665 9.67194 5.75322 9.98518 5.41799L10.8391 4.50393ZM12 8.00002C10.6746 8.00005 9.60002 9.07455 9.60002 10.4C9.60002 11.7255 10.6746 12.8 12 12.8C13.3255 12.8 14.4 11.7255 14.4 10.4C14.4 9.07454 13.3255 8.00002 12 8.00002Z" fill-rule="evenodd" clip-rule="evenodd" fill="#9F87F7"></path><path opacity="0.5" d="M17.6044 17.707C17.3352 17.953 16.9803 18.108 16.5873 18.1213C16.5515 18.1225 16.5156 18.1225 16.4797 18.1213L15.2296 18.0789C14.771 18.0634 14.3282 18.2468 14.0149 18.582L13.1609 19.496C12.5618 20.1371 11.5565 20.1711 10.9154 19.5721C10.8891 19.5476 10.8638 19.5222 10.8392 19.496L9.98524 18.582C9.672 18.2468 9.22913 18.0634 8.77059 18.0789L7.52048 18.1213C7.08877 18.1359 6.69145 17.9769 6.39575 17.707C7.48631 15.7352 9.58727 14.4 12.0001 14.4C14.4129 14.4 16.5139 15.7352 17.6044 17.707ZM12.0001 8C13.3256 8 14.4001 9.07452 14.4001 10.4C14.4001 11.7255 13.3256 12.8 12.0001 12.8C10.6746 12.8 9.60009 11.7255 9.60009 10.4C9.60009 9.07452 10.6746 8 12.0001 8Z" fill-rule="evenodd" clip-rule="evenodd" fill="#9F87F7"></path></svg><span>от собственника</span></div> <div class="web-sticker test-sticker"><svg class="test-icon" viewBox="4 4 16 16" aria-hidden="true"><path d="M13.0294 4.55071C13.7002 4.55071 14.345 4.81345 14.8233 5.28375L19.5141 9.89816C20.1585 10.5323 20.1624 11.5697 19.5231 12.209L17.5965 14.1365C16.9608 14.7719 15.9295 14.7722 15.2939 14.1365L13.7279 12.5696L9.40868 17.3212C8.54489 18.271 7.01767 18.3123 6.11138 17.3502C5.23085 16.4154 5.31146 14.9336 6.2885 14.1002L11.0582 10.0317L8.355 7.32844C7.32989 6.30307 8.05603 4.55009 9.50587 4.5498L13.0294 4.55071Z" fill="#DB001C"/></svg></div> <div class="web-sticker test-sticker"><svg class="test-icon" viewBox="4 4 16 16" aria-hidden="true"><path d="M4.96979 5.09473C5.26269 4.80186 5.73746 4.80184 6.03034 5.09473L19.0303 18.0947C19.3232 18.3876 19.3232 18.8624 19.0303 19.1553C18.7375 19.4482 18.2627 19.4481 17.9698 19.1553L16.9298 18.1152C16.5767 18.4308 16.1128 18.625 15.6016 18.625H8.3985C7.29403 18.6249 6.3985 17.7295 6.3985 16.625V11.1846C6.39868 10.2204 6.74773 9.2898 7.378 8.56348L4.96979 6.15527C4.6769 5.86238 4.6769 5.38762 4.96979 5.09473Z" fill="#DB001C"/><path d="M15.6016 4.625C16.7062 4.625 17.6016 5.52043 17.6016 6.625V14.5557L9.40339 6.35742L10.1075 5.59375C10.6755 4.97643 11.4767 4.62512 12.3155 4.625H15.6016Z" fill="#DB001C"/></svg></div>
+  </div>
+</div>
+</div>
+
+<button class="theme-toggle" id="theme-switch" type="button">Тёмная тема</button>
+<script>
+  const themeSwitch = document.getElementById('theme-switch');
+  themeSwitch.addEventListener('click', function () {
+    const darkMode = document.body.classList.toggle('dark-mode');
+    themeSwitch.textContent = darkMode ? 'Светлая тема' : 'Тёмная тема';
+  });
+</script>
+</body>
+</html>
